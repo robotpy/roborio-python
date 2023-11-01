@@ -1,0 +1,12 @@
+*.ipk
+*.gz
+*.tgz
+
+/data
+/data.old
+/dbgdata
+/dbgdata.old
+/dbgtmp
+/devdata
+/devdata.old
+/devtmp

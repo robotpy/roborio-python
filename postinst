@@ -1,0 +1,32 @@
+#!/bin/sh
+if [ x"$D" = "x" ]; then
+	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
+fi
+# compile library files
+/usr/bin/env PYTHONPATH=/usr/local/lib/python3.12 LD_LIBRARY_PATH=/usr/local/lib \
+    /usr/local/bin/python3 -Wi /usr/local/lib/python3.12/compileall.py \
+    -d lib/python3.12 -f -q \
+    -x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
+    /usr/local/lib/python3.12
+/usr/bin/env PYTHONPATH=/usr/local/lib/python3.12 LD_LIBRARY_PATH=/usr/local/lib \
+    /usr/local/bin/python3 -Wi -O /usr/local/lib/python3.12/compileall.py \
+    -d lib/python3.12 -f -q \
+    -x 'bad_coding|badsyntax|site-packages|lib2to3/tests/data' \
+    /usr/local/lib/python3.12
+/usr/bin/env PYTHONPATH=/usr/local/lib/python3.12 LD_LIBRARY_PATH=/usr/local/lib \
+    /usr/local/bin/python3 -Wi /usr/local/lib/python3.12/compileall.py \
+    -d lib/python3.12/site-packages -f -q \
+    -x badsyntax /usr/local/lib/python3.12/site-packages
+/usr/bin/env PYTHONPATH=/usr/local/lib/python3.12 LD_LIBRARY_PATH=/usr/local/lib \
+    /usr/local/bin/python3 -Wi -O /usr/local/lib/python3.12/compileall.py \
+    -d lib/python3.12/site-packages -f -q \
+    -x badsyntax /usr/local/lib/python3.12/site-packages
+
+# Fix pip to not warn when running as root because we don't care
+sed -i 's/def warn_if_run_as_root() -> None:$/def warn_if_run_as_root() -> None: return\ndef _unused():/g' \
+    /usr/local/lib/python3.12/site-packages/pip/_internal/cli/req_command.py
+
+# Let user program set RT thread priorities by making CAP_SYS_NICE
+# permitted, inheritable, and effective. See "man 7 capabilities"
+# for docs on capabilities and file capability sets.
+setcap cap_sys_nice+eip /usr/local/bin/python3.12
