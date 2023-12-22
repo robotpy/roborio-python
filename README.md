@@ -36,6 +36,6 @@ ln -s /media/sda1/lib /usr/local/lib
 
 Once your RoboRIO is sufficiently mangled, execute this from your host:
 
-    make ROBORIO=roborio-XXXX-frc.local all
+    make ROBORIO=roborio-XXXX-frc.local BUILD_HOME=/media/sda1 all
 
-Building on a first generation RoboRIO takes about half a day.
+Building on a first generation RoboRIO takes about 6 to 7 hours.
