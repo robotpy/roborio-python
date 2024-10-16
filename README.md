@@ -28,6 +28,9 @@ There are several non-automated steps:
 mkdir /media/sda1/bin
 mkdir /media/sda1/include
 mkdir /media/sda1/lib
+mkdir /media/sda1/lib
+
+rmdir /usr/local/lib
 
 ln -s /media/sda1/bin /usr/local/bin
 ln -s /media/sda1/include /usr/local/include

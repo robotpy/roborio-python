@@ -10,7 +10,7 @@
 # BUILD_DIR - the directory where the TGZ gets extracted to.
 #             defaults to TGZ with .tgz and .tar.gz stripped
 # BUILD_DIR_EXTRA - the directory inside the TGZ that builds should happen in
-# BUILD_WARNING - warning to print before build
+# CONFIGURE_CMD - the build command
 # BUILD_CMD - the build command
 # INSTALL_CMD - the install command
 # GETDATA_TARARGS - the args to use for tar when getting data
@@ -31,7 +31,7 @@ ifndef ROBORIO
 $(error ROBORIO is not set, use 'make ROBORIO=roborio-XXXX-frc.local')
 endif
 
-.PHONY: all init-ssh sync-date install-deps fetch extract build install strip-exes fetch-src getdata getdata-pkg getdata-dev getdata-dbg
+.PHONY: all init-ssh sync-date install-deps fetch extract patch build install strip-exes fetch-src getdata getdata-pkg getdata-dev getdata-dbg
 
 ifdef GETDATA_DEV_TARARGS
 GETDATA_DEV_TARGET=getdata-dev
@@ -43,7 +43,7 @@ endif
 
 ALLTARGETS ?= clean \
 	sync-date install-deps \
-	fetch extract build install strip-exes \
+	fetch extract patch configure build install strip-exes \
 	getdata ipk
 all: ${ALLTARGETS}
 
@@ -67,18 +67,16 @@ ${TGZ}:
 extract: ${TGZ}
 	ssh ${BUILD_USER}@${ROBORIO} 'cd ${BUILD_HOME} && rm -rf ${BUILD_DIR}'
 	cat ${TGZ} | ssh ${BUILD_USER}@${ROBORIO} 'cd ${BUILD_HOME} && mkdir ${BUILD_DIR} && cd ${BUILD_DIR} && tar xzf - --strip-components=1'
+
+patch:
 ifdef PATCHES
 	$(foreach patch, $(PATCHES), ssh ${BUILD_USER}@${ROBORIO} 'cd ${BUILD_HOME} && cd ${BUILD_DIR} && patch -p1' < $(patch))
 endif	
 
+configure:
+	ssh ${BUILD_USER}@${ROBORIO} 'ulimit -s ${STACK_SIZE} && cd ${BUILD_HOME} && cd ${BUILD_DIR}/${BUILD_DIR_EXTRA} && ${CONFIGURE_CMD}'
+
 build:
-ifdef BUILD_WARNING
-	@echo "--------------------------------------------------------------"
-	@echo "${BUILD_WARNING}"
-	@echo "--------------------------------------------------------------"
-	@echo "Press ENTER to continue"
-	@bash -c read
-endif
 	ssh ${BUILD_USER}@${ROBORIO} 'ulimit -s ${STACK_SIZE} && cd ${BUILD_HOME} && cd ${BUILD_DIR}/${BUILD_DIR_EXTRA} && ${BUILD_CMD}'
 
 install:
