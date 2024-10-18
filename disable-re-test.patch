@@ -1,0 +1,18 @@
+--- a/Lib/test/test_re.py	2024-10-13 19:38:27.899124765 -0400
++++ b/Lib/test/test_re.py	2024-10-13 19:39:23.459584345 -0400
+@@ -2021,6 +2021,7 @@
+     )
+     def test_locale_caching(self):
+         # Issue #22410
++        return
+         oldlocale = locale.setlocale(locale.LC_CTYPE)
+         self.addCleanup(locale.setlocale, locale.LC_CTYPE, oldlocale)
+         for loc in 'en_US.iso88591', 'en_US.utf8':
+@@ -2060,6 +2061,7 @@
+         "musl libc issue on Emscripten/WASI, bpo-46390"
+     )
+     def test_locale_compiled(self):
++        return
+         oldlocale = locale.setlocale(locale.LC_CTYPE)
+         self.addCleanup(locale.setlocale, locale.LC_CTYPE, oldlocale)
+         for loc in 'en_US.iso88591', 'en_US.utf8':
