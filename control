@@ -1,5 +1,5 @@
 Package: python313
-Version: 3.13.0-r1
+Version: 3.13.1-r1
 Description: Python programming language
 Section: devel
 Priority: optional
@@ -10,4 +10,4 @@ OE: python313
 Homepage: http://www.python.org
 Depends: libc6
 Recommends: libreadline6
-Source: https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz
+Source: https://www.python.org/ftp/python/3.13.1/Python-3.13.1.tgz
