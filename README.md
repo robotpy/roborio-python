@@ -28,7 +28,7 @@ There are several non-automated steps:
 mkdir /media/sda1/bin
 mkdir /media/sda1/include
 mkdir /media/sda1/lib
-mkdir /media/sda1/lib
+mkdir /media/sda1/tmp
 
 rmdir /usr/local/lib
 

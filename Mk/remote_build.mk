@@ -57,7 +57,7 @@ endif
 
 install-deps:
 ifneq ($(strip ${DEPS}),)
-	ssh ${BUILD_USER}@${ROBORIO} 'opkg update && opkg install ${DEPS} && (opkg clean || true)'
+	ssh ${BUILD_USER}@${ROBORIO} 'opkg update; opkg install ${DEPS} && (opkg clean || true)'
 endif
 
 fetch: ${TGZ}
